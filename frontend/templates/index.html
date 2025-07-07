@@ -1,0 +1,810 @@
+<html class="transition-colors duration-500" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Ian Santos - Desenvolvedor Full Stack
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <script>
+   tailwind.config = {
+     darkMode: 'class',
+   }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;family=Merriweather&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/frontend/static/css/style.css"/>
+ </head>
+ <body class="bg-[#050a0f] text-white min-h-screen flex flex-col transition-colors duration-500 dark:bg-white dark:text-gray-900 relative palette-default">
+  <!-- Sidebar flags -->
+  <aside aria-label="Seleção de idioma e acessibilidade" id="flag-sidebar" role="complementary">
+    <button id="show-flags-btn" aria-label="Selecionar idioma" class="bg-transparent border-none p-0 m-0 text-white text-2xl focus:outline-none" role="button" tabindex="0">
+      <i class="fas fa-globe" aria-hidden="true"></i>
+    </button>
+    <div id="flags-list" class="flex flex-col gap-3 mt-2" style="display:none;" role="list" aria-label="Idiomas disponíveis">
+      <img alt="Bandeira do Brasil" src="https://flagcdn.com/w40/br.png" role="img"/>
+      <img alt="Bandeira dos Estados Unidos" src="https://flagcdn.com/w40/us.png" role="img"/>
+      <img alt="Bandeira da Espanha" src="https://flagcdn.com/w40/es.png" role="img"/>
+      <img alt="Bandeira da França" src="https://flagcdn.com/w40/fr.png" role="img"/>
+      <img alt="Bandeira da Alemanha" src="https://flagcdn.com/w40/de.png" role="img"/>
+      <img alt="Bandeira da China" src="https://flagcdn.com/w40/cn.png" role="img"/>
+      <img alt="Bandeira do Japão" src="https://flagcdn.com/w40/jp.png" role="img"/>
+    </div>
+    <!-- Botão de acessibilidade abaixo do globo -->
+    <div class="relative mt-4">
+      <button aria-label="Acessibilidade" id="accessibility-btn" class="text-white text-2xl hover:text-sky-400 transition focus:outline-none" type="button" role="button" tabindex="0">
+        <i class="fas fa-universal-access" aria-hidden="true"></i>
+      </button>
+      <div id="accessibility-menu"
+           class="hidden absolute left-12 top-0 w-56 bg-white rounded-lg shadow-xl z-50 text-left p-2 text-gray-800"
+           role="menu" aria-label="Menu de acessibilidade">
+        <button class="w-full text-left px-3 py-2 hover:bg-sky-100 rounded" onclick="changeFontSize(1)" tabindex="0" role="menuitem">
+          <i class="fas fa-search-plus mr-2" aria-hidden="true"></i>Aumentar fonte
+        </button>
+        <button class="w-full text-left px-3 py-2 hover:bg-sky-100 rounded" onclick="changeFontSize(-1)" tabindex="0" role="menuitem">
+          <i class="fas fa-search-minus mr-2" aria-hidden="true"></i>Diminuir fonte
+        </button>
+        <button class="w-full text-left px-3 py-2 hover:bg-sky-100 rounded" onclick="toggleContrast()" tabindex="0" role="menuitem">
+          <i class="fas fa-adjust mr-2" aria-hidden="true"></i>Contraste alto
+        </button>
+        <button class="w-full text-left px-3 py-2 hover:bg-sky-100 rounded" onclick="toggleScreenReader()" tabindex="0" role="menuitem">
+          <i class="fas fa-assistive-listening-systems mr-2" aria-hidden="true"></i>Leitura de tela
+        </button>
+      </div>
+    </div>
+    <!-- Botão de atalhos abaixo do acessibilidade -->
+    <div class="relative mt-4">
+      <button aria-label="Atalhos de teclado" id="shortcuts-btn" class="text-white text-2xl hover:text-sky-400 transition focus:outline-none" type="button" role="button" tabindex="0">
+        <i class="fas fa-keyboard" aria-hidden="true"></i>
+      </button>
+      <div id="shortcuts-menu"
+           class="hidden absolute left-12 top-0 w-64 bg-white rounded-lg shadow-xl z-50 text-left p-4 text-gray-800"
+           role="menu" aria-label="Menu de atalhos de teclado">
+        <div class="font-bold text-gray-700 mb-2">Teclas de atalho:</div>
+        <ul class="text-sm text-gray-700 space-y-1" role="list">
+          <li><kbd>Alt</kbd> + <kbd>1</kbd> — Ir para <b>Home</b></li>
+          <li><kbd>Alt</kbd> + <kbd>2</kbd> — Ir para <b>About</b></li>
+          <li><kbd>Alt</kbd> + <kbd>3</kbd> — Ir para <b>Projetos</b></li>
+          <li><kbd>Alt</kbd> + <kbd>4</kbd> — Ir para <b>Skills</b></li>
+          <li><kbd>Alt</kbd> + <kbd>5</kbd> — Ir para <b>Feedback</b></li>
+          <li><kbd>Alt</kbd> + <kbd>6</kbd> — Ir para <b>Contato</b></li>
+          <li><kbd>Alt</kbd> + <kbd>7</kbd> — Ir para <b>Serviços</b></li>
+          <li><kbd>Alt</kbd> + <kbd>8</kbd> — Ir para <b>Contrate-me</b></li>
+          <li><kbd>Alt</kbd> + <kbd>9</kbd> — Ir para <b>Downloads</b></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+  <!-- HEADER PRINCIPAL -->
+  <header class="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full relative z-30 transition-all duration-300 bg-transparent" id="main-header" role="banner" aria-label="Cabeçalho principal">
+   <div class="text-white font-bold text-lg tracking-wide flex items-center dark:text-gray-900 select-none">
+    <span class="text-sky-400">
+     &lt; IAN SANTOS. /&gt;
+    </span>
+   </div>
+   <div class="flex items-center space-x-4">
+    <button aria-label="Alternar tema claro/escuro" class="text-white dark:text-gray-900 text-xl focus:outline-none" id="theme-toggle" role="button" tabindex="0">
+     <i class="fas fa-sun" id="theme-icon" aria-hidden="true"></i>
+    </button>
+    <!-- Seletor de paleta de cores com ícone de pincel -->
+    <div class="palette-dropdown" id="palette-dropdown">
+      <button class="palette-trigger" aria-label="Escolher paleta de cores" id="palette-trigger" role="button" tabindex="0">
+        <i class="fas fa-paint-brush" aria-hidden="true"></i>
+      </button>
+      <div class="palette-menu" id="palette-menu" role="menu" aria-label="Paletas de cores">
+        <button class="palette-btn" data-palette="default" aria-label="Padrão" role="menuitem" tabindex="0"></button>
+        <button class="palette-btn" data-palette="green" aria-label="Verde" role="menuitem" tabindex="0"></button>
+        <button class="palette-btn" data-palette="purple" aria-label="Roxo" role="menuitem" tabindex="0"></button>
+        <button class="palette-btn" data-palette="orange" aria-label="Laranja" role="menuitem" tabindex="0"></button>
+      </div>
+    </div>
+    <button aria-label="Abrir menu de navegação" class="text-white dark:text-gray-900 text-2xl focus:outline-none" id="menu-toggle" type="button" role="button" tabindex="0">
+     <i class="fas fa-bars" aria-hidden="true"></i>
+    </button>
+   </div>
+  </header>
+  <!-- Mobile menu overlay -->
+  <div aria-labelledby="mobile-menu-title" aria-modal="true" class="fixed top-0 right-0 h-full w-64 bg-black bg-opacity-95 shadow-lg z-50 flex flex-col items-end px-0 py-0 transition-transform duration-300 transform translate-x-full" id="mobile-menu" role="dialog" tabindex="-1">
+   <button aria-label="Close menu" class="close-menu mt-4 mr-6 text-3xl text-white" type="button">
+    ×
+   </button>
+   <nav class="flex flex-col items-end space-y-6 mt-16 w-full pr-10" id="mobile-menu-nav">
+    <a class="text-white text-lg font-semibold" href="#home" tabindex="0">
+     HOME
+    </a>
+    <a class="text-white text-lg font-semibold" href="#about" tabindex="0">
+     ABOUT
+    </a>
+    <a class="text-white text-lg font-semibold" href="#projects" tabindex="0">
+     PROJECTS
+    </a>
+    <a class="text-white text-lg font-semibold" href="#skills" tabindex="0">
+     SKILLS
+    </a>
+    <a class="text-white text-lg font-semibold" href="#feedbackSection" tabindex="0">
+     FEEDBACK
+    </a>
+    <a class="text-white text-lg font-semibold" href="#contact" tabindex="0">
+     CONTACT
+    </a>
+    <a class="text-white text-lg font-semibold" href="#services" tabindex="0">
+     SERVICES
+    </a>
+    <a class="text-white text-lg font-semibold" href="#hire-me" tabindex="0">
+     HIRE-ME
+    </a>
+    <a class="text-white text-lg font-semibold" href="#downloads" tabindex="0">
+     DOWNLOADS
+    </a>
+   </nav>
+  </div>
+  <!-- HERO -->
+  <main class="flex-grow w-full py-10" id="home" role="main">
+    <!-- INÍCIO DO CONTAINER CENTRALIZADOR -->
+    <div class="max-w-7xl mx-auto w-full px-6 flex flex-col gap-20"
+         style="box-sizing:border-box;">
+      <div class="w-full flex flex-col gap-20">
+        <!-- SEÇÃO 1: HERO estilo Instagram perfil -->
+        <section class="flex flex-col md:flex-row md:items-center md:space-x-10 border-b border-gray-300 pb-8 justify-center items-center max-w-7xl mx-auto w-full px-6" id="hero" aria-label="Seção de apresentação">
+          <div class="flex justify-center md:justify-start mb-6 md:mb-0">
+            <div style="width: 18rem; height: 18rem; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 6px #38bdf8; display: flex; align-items: center; justify-content: center;">
+              <img
+                alt="Foto de perfil de Ian Santos sorrindo, circular, 800x800 pixels"
+                src="/frontend/static/images/foto_ian_rosto.png"
+                width="288"
+                height="288"
+                style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
+                role="img"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col justify-center">
+            <div class="flex items-center space-x-8 mb-8 flex-wrap">
+              <h2 class="text-5xl font-extrabold truncate max-w-2xl text-white">
+                iansantos.dev
+              </h2>
+              <div class="flex items-center space-x-2">
+                <a href="/frontend/static/pdf/Curriculo_Ian_Santos.pdf"_blank" aria-label="Download CV"
+                   id="downloadCVBtnFront"
+                   class="bg-blue-700 text-white px-4 py-2 rounded-md flex items-center justify-center relative w-32 h-12">
+                  <i class="fas fa-download mr-2"></i>
+                  <span id="downloadProgressFront">Baixar CV</span>
+                </a>
+                <!-- Botão de configurações ao lado do download CV -->
+                <button aria-label="Configurações" id="settings-egg-btn" class="text-white text-2xl hover:text-sky-400 transition ml-1 focus:outline-none" type="button">
+                  <i class="fas fa-cog" id="settings-egg-icon"></i>
+                </button>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-bold text-3xl mb-2 text-white">
+                Ian Santos
+              </h3>
+              <p class="text-2xl text-gray-200 mb-2 leading-relaxed">
+                Desenvolvedor Full Stack Python e Java<br>
+                Foco em nuvem, APIs e problemas reais.<br>
+                Sistemas inteligentes e eficientes.<br>
+              </p>
+              <div class="flex flex-row gap-12 mb-2">
+                <div class="flex flex-col items-center">
+                  <span class="text-5xl font-extrabold text-sky-400">5+</span>
+                  <span class="text-base text-gray-400 font-bold uppercase tracking-widest text-center" style="line-height:1;">ANOS DE EXPERIÊNCIA</span>
+                </div>
+                <div class="flex flex-col items-center">
+                  <span class="text-5xl font-extrabold text-sky-400">20+</span>
+                  <span class="text-base text-gray-400 font-bold uppercase tracking-widest text-center" style="line-height:1;">PROJETOS CONCLUÍDOS</span>
+                </div>
+              </div>
+              <span class="text-sky-400 font-extrabold text-2xl block mb-2">Vamos inovar juntos?</span>
+              <a class="text-blue-400 text-xl hover:underline" href="https://github.com/ianofc" rel="noopener noreferrer" target="_blank">
+                github.com/ianofc
+              </a>
+            </div>
+          </div>
+        </section>
+        <!-- SEÇÃO DESTAQUES (após HERO, antes do ABOUT) -->
+        <section class="mt-8 flex flex-col items-center w-full max-w-7xl mx-auto px-6" id="destaques" aria-label="Destaques profissionais">
+          <h2 class="text-sky-400 text-2xl font-bold mb-4">DESTAQUES</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-5xl">
+            <div class="bg-[#18191b] rounded-xl shadow-lg p-6 flex-1 min-w-[220px] max-w-xs flex flex-col items-center border border-sky-400" role="region" aria-label="Prêmio Inovação TI 2023">
+              <i class="fas fa-trophy text-yellow-400 text-3xl mb-2" aria-hidden="true"></i>
+              <span class="font-bold text-white text-lg mb-1">Prêmio Inovação TI 2023</span>
+              <span class="text-gray-300 text-sm text-center">Reconhecimento por soluções inovadoras em gestão pública digital.</span>
+            </div>
+            <div class="bg-[#18191b] rounded-xl shadow-lg p-6 flex-1 min-w-[220px] max-w-xs flex flex-col items-center border border-sky-400" role="region" aria-label="Eficiência em processos">
+              <i class="fas fa-users text-green-400 text-3xl mb-2" aria-hidden="true"></i>
+              <span class="font-bold text-white text-lg mb-1">+30% Eficiência</span>
+              <span class="text-gray-300 text-sm text-center">Modernização de processos administrativos com integração em nuvem.</span>
+            </div>
+            <div class="bg-[#18191b] rounded-xl shadow-lg p-6 flex-1 min-w-[220px] max-w-xs flex flex-col items-center border border-sky-400" role="region" aria-label="Projetos com IA e Machine Learning">
+              <i class="fas fa-robot text-pink-400 text-3xl mb-2" aria-hidden="true"></i>
+              <span class="font-bold text-white text-lg mb-1">IA & Machine Learning</span>
+              <span class="text-gray-300 text-sm text-center">Projetos entregues com automação inteligente e análise preditiva.</span>
+            </div>
+            <div class="bg-[#18191b] rounded-xl shadow-lg p-6 flex-1 min-w-[220px] max-w-xs flex flex-col items-center border border-sky-400" role="region" aria-label="Mentorias Voluntárias">
+              <i class="fas fa-hands-helping text-blue-400 text-3xl mb-2" aria-hidden="true"></i>
+              <span class="font-bold text-white text-lg mb-1">Mentorias Voluntárias</span>
+              <span class="text-gray-300 text-sm text-center">Apoio a jovens talentos em tecnologia e programação.</span>
+            </div>
+          </div>
+        </section>
+        <!-- SEÇÃO ABOUT (mover para antes dos projetos) -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6" id="about-details">
+          <h2 class="text-sky-400 text-2xl font-bold mb-8">
+           ABOUT
+          </h2>
+          <p class="mb-6 text-white font-bold text-lg">
+           Sou Ian Santos, um profissional multidisciplinar com mais de 7 anos de experiência em desenvolvimento back-end, automação e liderança estratégica em tecnologia. Minha missão é transformar ideias em soluções digitais inteligentes que impulsionem eficiência e inovação.
+           <br/>
+           Atualmente, atuo como Chefe do Departamento de TI da Prefeitura de Palmeiras-BA, onde lidero a modernização de processos administrativos através da digitalização e integração de sistemas em nuvem, otimizando em mais de 30% o tempo e os recursos dedicados às tarefas operacionais. Paralelamente, sou fundador e CEO do GRUPO IO SANTOS, uma empresa dedicada ao desenvolvimento de soluções tecnológicas personalizadas que integram inteligência artificial e aprendizado de máquina, atendendo clientes de diferentes setores.
+           <br/>
+           Ao longo de minha trajetória, participei de projetos estratégicos como a implementação de sistemas de gestão para escritórios de advocacia, automação de processos licitatórios e criação de ferramentas para gestão pública e privada. Em um dos casos mais marcantes, desenvolvi e implementei um sistema de envio de documentação via nuvem que aumentou a segurança das informações e impediu em 40% o retrabalho com arquivamento físico.
+           <br/>
+           Tenho como objetivo constante promover a transformação digital e capacitar equipes para que alcancem resultados completos, sempre alinhados às melhores práticas e normas de compliance.
+           <br/>
+           Fora do ambiente profissional, me dedico a projetos de impacto social, como mentorias voluntárias, e ao desenvolvimento contínuo de habilidades em Python, Java e tecnologias emergentes, acreditando que a educação e a tecnologia podem criar oportunidades e transformar realidades.
+          </p>
+        </section>
+        <!-- SEÇÃO PROJETOS -->
+        <section class="carousel-container bg-black p-7 rounded-3xl justify-center relative mt-20 w-full max-w-7xl mx-auto px-6 flex flex-col" id="projects" aria-label="Projetos do GitHub">
+          <h2 class="text-sky-400 text-xl font-bold mb-8">
+           PROJETOS NO GITHUB.COM/IANOFC
+          </h2>
+          <div class="flex flex-wrap gap-4 mb-6" id="project-filters">
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="all">Todos</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="web">Web</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="api">API</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="cli">CLI</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="cloud">Cloud</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="ia">IA</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="python">Python</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="java">Java</button>
+            <button class="px-4 py-2 rounded-full bg-[#18191b] border border-sky-400 text-sky-400 font-bold hover:bg-sky-400 hover:text-white transition" data-filter="bd">BD</button>
+          </div>
+          <div class="flex flex-row items-center">
+           <button aria-label="Anterior" class="mr-4 text-sky-400 text-4xl font-bold hover:text-sky-300 bg-transparent border-none" id="prev-btn">
+            <i class="fas fa-angle-left">
+            </i>
+           </button>
+           <div class="flex-1 flex flex-col md:flex-row bg-[#18191b] rounded-2xl overflow-hidden">
+            <div class="flex-1 flex flex-col items-center justify-center">
+             <img alt="Imagem principal do projeto" class="w-full h-72 object-cover rounded-lg" id="main-image" src="https://github.com/ianofc/gerador_resumos/raw/main/assets/images/tema.png" role="img" loading="lazy"/>
+             <div class="flex flex-row justify-center mt-4 gap-2">
+              <img alt="Miniatura 1 do projeto" class="w-20 h-16 object-cover rounded cursor-pointer" id="thumbnail-1" onclick="openModal(this.src)" src="https://github.com/ianofc/gerador_resumos/raw/main/assets/images/img1.png" role="img" loading="lazy"/>
+              <img alt="Miniatura 2 do projeto" class="w-20 h-16 object-cover rounded cursor-pointer" id="thumbnail-2" onclick="openModal(this.src)" src="https://github.com/ianofc/gerador_resumos/raw/main/assets/images/img2.png" role="img" loading="lazy"/>
+              <img alt="Miniatura 3 do projeto" class="w-20 h-16 object-cover rounded cursor-pointer" id="thumbnail-3" onclick="openModal(this.src)" src="https://github.com/ianofc/gerador_resumos/raw/main/assets/images/img3.png" role="img" loading="lazy"/>
+              <img alt="Miniatura 4 do projeto" class="w-20 h-16 object-cover rounded cursor-pointer" id="thumbnail-4" onclick="openModal(this.src)" src="https://github.com/ianofc/gerador_resumos/raw/main/assets/images/img4.png" role="img" loading="lazy"/>
+             </div>
+             <div class="flex justify-center mt-2 gap-2" id="carousel-indicators">
+             </div>
+            </div>
+            <div class="flex-1 flex flex-col justify-between p-6">
+             <h2 class="text-white text-3xl font-extrabold mb-4" id="project-title">
+              CALCULATOR
+             </h2>
+             <p class="text-white text-base font-mono" id="project-description">
+              UMA CALCULADORA CIENTÍFICA EM PYTHON, DESENVOLVIDA COM TKINTER. OFERECE FUNCIONALIDADES BÁSICAS (ADIÇÃO, SUBTRAÇÃO, MULTIPLICAÇÃO, DIVISÃO) E AVANÇADAS (SENO, COSSENO, TANGENTE, RAIZ QUADRADA). INTERFACE INTUITIVA COM BOTÕES PARA OPERAÇÕES E SUPORTE A PARÊNTESES. IDEAL PARA CÁLCULOS SIMPLES E CIENTÍFICOS.
+             </p>
+             <div class="flex flex-row gap-2 mt-4" id="project-tools">
+             </div>
+            </div>
+           </div>
+           <button aria-label="Próximo" class="ml-4 text-sky-400 text-4xl font-bold hover:text-sky-300 bg-transparent border-none" id="next-btn">
+            <i class="fas fa-angle-right">
+            </i>
+           </button>
+          </div>
+        </section>
+        <!-- SEÇÃO SKILLS (Jogo da Memória) -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6 flex flex-col" id="skills">
+          <h2 class="text-sky-400 text-2xl font-bold mb-2">
+           DESCUBRA MINHAS HABILIDADES
+          </h2>
+          <p class="text-white font-bold mb-4">
+           JOGUE O JOGO DA MEMORIA PARA REVELAR MINHAS PRINCIPAIS HABILIDADES!
+          </p>
+          <input class="w-full max-w-md mx-auto block rounded-full bg-gray-100 text-gray-700 text-center font-bold py-3 px-6 mb-4" id="playerName" placeholder="DIGITE SEU NOME" type="text"/>
+          <div class="flex flex-row justify-center gap-4 mb-4" id="gameControls">
+           <button class="bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-full px-8 py-2" id="startButton">
+            INICIAR
+           </button>
+           <button class="bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-full px-8 py-2" disabled="" id="pauseButton">
+            PAUSAR
+           </button>
+           <button class="bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-full px-8 py-2" disabled="" id="resetButton">
+            REINICIAR
+           </button>
+          </div>
+          <div class="text-white font-bold text-xl mb-4" id="timer">
+           00:00
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 justify-center" id="gameBoard">
+          </div>
+          <ul class="mt-4 max-h-32 overflow-y-auto text-sm text-sky-200" id="ranking">
+          </ul>
+        </section>
+        <!-- SEÇÃO SKILLS-BARS -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6 flex flex-col" id="skills-bars">
+          <h2 class="text-sky-400 text-2xl font-bold mb-8">
+           MINHAS HABILIDADES
+          </h2>
+          <h3 class="text-lg font-bold text-gray-200 mt-8 mb-4">Linguagens de Programação</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Python" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Py" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-yellow-500 mb-1">Python</h3>
+                <p class="text-gray-700 text-xs text-center">Automação, análise de dados e IA.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="JavaScript" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=JS" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-blue-600 mb-1">JavaScript</h3>
+                <p class="text-gray-700 text-xs text-center">Web moderna e interatividade.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Java" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Java" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-red-700 mb-1">Java</h3>
+                <p class="text-gray-700 text-xs text-center">Sistemas corporativos.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Go" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Go" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-cyan-500 mb-1">Go</h3>
+                <p class="text-gray-700 text-xs text-center">Performance e concorrência.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="TypeScript" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=TS" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-blue-700 mb-1">TypeScript</h3>
+                <p class="text-gray-700 text-xs text-center">JS com tipagem estática.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="HTML" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=HTML" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-orange-500 mb-1">HTML</h3>
+                <p class="text-gray-700 text-xs text-center">Estruturação de páginas web.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="CSS" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=CSS" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-blue-400 mb-1">CSS</h3>
+                <p class="text-gray-700 text-xs text-center">Estilização e design web.</p>
+              </div>
+            </article>
+          </div>
+          <h3 class="text-lg font-bold text-gray-200 mt-8 mb-4">Bancos de Dados</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="SQL" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=SQL" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-blue-400 mb-1">SQL</h3>
+                <p class="text-gray-700 text-xs text-center">Banco de dados relacional.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="PostgreSQL" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=PG" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-indigo-500 mb-1">PostgreSQL</h3>
+                <p class="text-gray-700 text-xs text-center">Banco de dados avançado.</p>
+              </div>
+            </article>
+          </div>
+          <h3 class="text-lg font-bold text-gray-200 mt-8 mb-4">Ferramentas & Frameworks</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Git" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Git" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-orange-400 mb-1">Git</h3>
+                <p class="text-gray-700 text-xs text-center">Controle de versão.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="GitHub" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=GH" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-black mb-1">GitHub</h3>
+                <p class="text-gray-700 text-xs text-center">Colaboração de código.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Docker" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Dock" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-red-400 mb-1">Docker</h3>
+                <p class="text-gray-700 text-xs text-center">Containers e deploy.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Kubernetes" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=K8s" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-teal-400 mb-1">Kubernetes</h3>
+                <p class="text-gray-700 text-xs text-center">Orquestração de containers.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Tailwind" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=TW" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-pink-400 mb-1">Tailwind</h3>
+                <p class="text-gray-700 text-xs text-center">CSS utilitário moderno.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Bootstrap" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=BS" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-purple-700 mb-1">Bootstrap</h3>
+                <p class="text-gray-700 text-xs text-center">Design responsivo.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="Node.js" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Node" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-green-400 mb-1">Node.js</h3>
+                <p class="text-gray-700 text-xs text-center">Backend rápido e escalável.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="React" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=React" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-purple-400 mb-1">React</h3>
+                <p class="text-gray-700 text-xs text-center">Interfaces reativas.</p>
+              </div>
+            </article>
+          </div>
+          <h3 class="text-lg font-bold text-gray-200 mt-8 mb-4">Metodologias & Gestão</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="ITIL" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=ITIL" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-green-700 mb-1">ITIL</h3>
+                <p class="text-gray-700 text-xs text-center">Gestão de serviços TI.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="SCRUM" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Scrum" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-orange-700 mb-1">SCRUM</h3>
+                <p class="text-gray-700 text-xs text-center">Gestão ágil de projetos.</p>
+              </div>
+            </article>
+            <article class="bg-white rounded-lg shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <img alt="AGILE" class="w-20 h-20 object-contain mt-4" src="https://placehold.co/80x80/png?text=Agile" loading="lazy"/>
+              <div class="p-4 flex flex-col items-center">
+                <h3 class="text-lg font-semibold text-pink-700 mb-1">AGILE</h3>
+                <p class="text-gray-700 text-xs text-center">Flexibilidade e entrega contínua.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+        <!-- SEÇÃO FEEDBACK (mover para antes do WhatsApp/contato) -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6 flex flex-col" id="feedbackSection">
+          <h2 class="text-sky-400 text-2xl font-bold mb-8">
+           FEEDBACK DOS USUARIOS
+          </h2>
+          <!-- Card único para formulário + lista de feedbacks, largura igual ao card CONTRATE-ME -->
+          <div class="bg-[#18191b] rounded-2xl p-10 w-full max-w-4xl mx-auto">
+            <form class="feedback-form mb-8" id="feedbackForm" autocomplete="off">
+              <div class="form-row">
+                <label for="feedbackName" class="block mb-1 font-bold text-sky-400">Seu nome</label>
+                <input id="feedbackName" name="name" type="text" maxlength="32" required class="w-full rounded-full px-4 py-2 text-gray-900 font-bold" placeholder="Digite seu nome"/>
+              </div>
+              <div class="form-row">
+                <label for="feedbackComment" class="block mb-1 font-bold text-sky-400">Comentário</label>
+                <textarea id="feedbackComment" name="comment" rows="2" maxlength="300" required placeholder="Deixe seu comentário ou sugestão..."></textarea>
+              </div>
+              <div class="form-row">
+                <span class="font-bold text-sky-400">Avaliação:</span>
+                <span class="star-rating ml-2" id="starRating">
+                  <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="5 estrelas">&#9733;</label>
+                  <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 estrelas">&#9733;</label>
+                  <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 estrelas">&#9733;</label>
+                  <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2 estrelas">&#9733;</label>
+                  <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 estrela">&#9733;</label>
+                </span>
+              </div>
+              <div class="form-row">
+                <span class="font-bold text-sky-400">Como se sentiu?</span>
+                <span class="emoji-picker" id="emojiPicker">
+                  <button type="button" class="emoji-btn" data-emoji="😀" aria-label="Feliz">😀</button>
+                  <button type="button" class="emoji-btn" data-emoji="😎" aria-label="Impressionado">😎</button>
+                  <button type="button" class="emoji-btn" data-emoji="🤩" aria-label="Inspirado">🤩</button>
+                  <button type="button" class="emoji-btn" data-emoji="👏" aria-label="Aplaudindo">👏</button>
+                  <button type="button" class="emoji-btn" data-emoji="👍" aria-label="Aprovado">👍</button>
+                </span>
+              </div>
+              <button type="submit">Enviar feedback</button>
+            </form>
+            <div class="max-h-96 overflow-y-auto">
+              <div class="space-y-8" id="feedbackList">
+                <div class="bg-gray-900 rounded-xl p-6 shadow-lg">
+                  <div class="flex items-center gap-4 mb-4">
+                    <img alt="Foto do usuário 1, homem sorridente com cabelo curto castanho e camisa azul" class="w-12 h-12 rounded-full object-cover" height="48" src="https://storage.googleapis.com/a1aa/image/2273b12e-05f7-49ad-703c-51edb2a90582.jpg" width="48" loading="lazy"/>
+                    <div>
+                      <p class="text-sky-400 font-bold">
+                        Lucas Silva
+                      </p>
+                      <p class="text-gray-400 text-sm">
+                        Desenvolvedor Frontend
+                      </p>
+                    </div>
+                  </div>
+                  <p class="text-white font-semibold">
+                    Ian é um profissional dedicado e extremamente competente. Seu trabalho no backend foi fundamental para o sucesso do nosso projeto.
+                  </p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-6 shadow-lg">
+                  <div class="flex items-center gap-4 mb-4">
+                    <img alt="Foto do usuário 2, mulher sorridente com cabelo longo loiro e óculos" class="w-12 h-12 rounded-full object-cover" height="48" src="https://storage.googleapis.com/a1aa/image/168e3c76-f691-4fb3-93d9-0ec07ebd3a71.jpg" width="48" loading="lazy"/>
+                    <div>
+                      <p class="text-sky-400 font-bold">
+                        Mariana Costa
+                      </p>
+                      <p class="text-gray-400 text-sm">
+                        Gerente de Projetos
+                      </p>
+                    </div>
+                  </div>
+                  <p class="text-white font-semibold">
+                    A liderança do Ian no departamento de TI trouxe uma transformação real para nossa empresa. Recomendo muito!
+                  </p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-6 shadow-lg">
+                  <div class="flex items-center gap-4 mb-4">
+                    <img alt="Foto do usuário 3, homem com barba curta e cabelo preto, usando camiseta cinza" class="w-12 h-12 rounded-full object-cover" height="48" src="https://storage.googleapis.com/a1aa/image/6a3265a2-cc39-4ecc-dc09-8ec506dc09a3.jpg" width="48" loading="lazy"/>
+                    <div>
+                      <p class="text-sky-400 font-bold">
+                        Carlos Mendes
+                      </p>
+                      <p class="text-gray-400 text-sm">
+                        Empresário
+                      </p>
+                    </div>
+                  </div>
+                  <p class="text-white font-semibold">
+                    Os sistemas desenvolvidos pelo Ian são robustos e eficientes. Sempre entrega no prazo e com qualidade.
+                  </p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-6 shadow-lg">
+                  <div class="flex items-center gap-4 mb-4">
+                    <img alt="Foto do usuário 4, mulher com cabelo curto castanho e sorriso amigável" class="w-12 h-12 rounded-full object-cover" height="48" src="https://storage.googleapis.com/a1aa/image/2575571e-3e06-435a-7825-a9ad7c5de3f9.jpg" width="48" loading="lazy"/>
+                    <div>
+                      <p class="text-sky-400 font-bold">
+                        Ana Paula
+                      </p>
+                      <p class="text-gray-400 text-sm">
+                        Analista de Sistemas
+                      </p>
+                    </div>
+                  </div>
+                  <p class="text-white font-semibold">
+                    Trabalhar com Ian foi uma experiência enriquecedora. Seu conhecimento em Python e Java é impressionante.
+                  </p>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-6 shadow-lg">
+                  <div class="flex items-center gap-4 mb-4">
+                    <img alt="Foto do usuário 5, homem sorridente com cabelo grisalho e camisa social branca" class="w-12 h-12 rounded-full object-cover" height="48" src="https://storage.googleapis.com/a1aa/image/0d663933-f2ee-49b8-7bdb-09bd6a57499c.jpg" width="48" loading="lazy"/>
+                    <div>
+                      <p class="text-sky-400 font-bold">
+                        Roberto Lima
+                      </p>
+                      <p class="text-gray-400 text-sm">
+                        Consultor de TI
+                      </p>
+                    </div>
+                  </div>
+                  <p class="text-white font-semibold">
+                    Ian tem uma visão estratégica que faz toda a diferença em projetos complexos. Excelente profissional.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- SEÇÃO CONTATO/WHATSAPP (vem depois do feedback agora) -->
+        <section class="mt-20 flex flex-col md:flex-row gap-10 items-center max-w-7xl mx-auto w-full px-6" id="fale-comigo" aria-label="Contato via WhatsApp">
+          <div class="flex-1 flex justify-center">
+           <img alt="Pessoa segurando celular, representando contato via WhatsApp" class="rounded-3xl w-80 h-80 object-cover" src="/frontend/static/images/foto_ian_santos.png" role="img" loading="lazy"/>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+           <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center w-full max-w-md">
+            <img alt="WhatsApp" class="w-16 h-16 mb-4" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" loading="lazy"/>
+            <h2 class="text-gray-900 text-2xl font-bold mb-2">
+             Fale comigo pelo
+             <br/>
+             WhatsApp
+            </h2>
+            <p class="text-gray-700 mb-4 text-center">
+             Precisa de ajuda ou quer conversar? Clique no botão abaixo para iniciar uma conversa comigo no WhatsApp.
+            </p>
+            <a class="bg-green-500 hover:bg-green-600 text-white font-bold rounded-full px-8 py-3 flex items-center gap-2" href="https://wa.me/your-number" target="_blank">
+             <i class="fab fa-whatsapp">
+             </i>
+             Enviar mensagem
+            </a>
+           </div>
+          </div>
+        </section>
+        <!-- SEÇÃO SERVIÇOS -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6 flex flex-col" id="services">
+          <h2 class="text-sky-400 text-2xl font-bold mb-8">
+           MEUS SERVIÇOS
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+           <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
+            <i class="fas fa-code text-sky-500 text-4xl mb-2">
+            </i>
+            <span class="font-bold text-lg text-gray-900">
+             Desenvolvimento Web
+            </span>
+            <p class="text-gray-700 text-center text-sm mt-2">
+             Criação de sites e aplicações web responsivas, modernas e otimizadas para performance e SEO.
+            </p>
+           </div>
+           <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
+            <i class="fas fa-server text-blue-600 text-4xl mb-2">
+            </i>
+            <span class="font-bold text-lg text-gray-900">
+             Desenvolvimento Backend
+            </span>
+            <p class="text-gray-700 text-center text-sm mt-2">
+             APIs robustas, integrações com bancos de dados e serviços em nuvem para sistemas escaláveis e seguros.
+            </p>
+           </div>
+           <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
+            <i class="fas fa-cloud text-blue-400 text-4xl mb-2">
+            </i>
+            <span class="font-bold text-lg text-gray-900">
+             Computação em Nuvem
+            </span>
+            <p class="text-gray-700 text-center text-sm mt-2">
+             Implantação e gerenciamento de infraestruturas em AWS, Azure e Google Cloud para alta disponibilidade.
+            </p>
+           </div>
+           <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
+            <i class="fas fa-mobile-alt text-blue-500 text-4xl mb-2">
+            </i>
+            <span class="font-bold text-lg text-gray-900">
+             Desenvolvimento Mobile
+            </span>
+            <p class="text-gray-700 text-center text-sm mt-2">
+             Aplicativos móveis nativos e híbridos com foco em usabilidade e desempenho para iOS e Android.
+            </p>
+           </div>
+           <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
+            <i class="fas fa-robot text-blue-400 text-4xl mb-2">
+            </i>
+            <span class="font-bold text-lg text-gray-900">
+             Inteligência Artificial
+            </span>
+            <p class="text-gray-700 text-center text-sm mt-2">
+             Soluções com machine learning, automação inteligente e análise preditiva para otimizar processos.
+            </p>
+           </div>
+           <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
+            <i class="fas fa-shield-alt text-blue-600 text-4xl mb-2">
+            </i>
+            <span class="font-bold text-lg text-gray-900">
+             Segurança da Informação
+            </span>
+            <p class="text-gray-700 text-center text-sm mt-2">
+             Auditorias, implementação de políticas e práticas para proteger dados e garantir conformidade.
+            </p>
+           </div>
+          </div>
+        </section>
+        <!-- SEÇÃO CONTRATE-ME -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6 flex flex-col" id="hire-me">
+          <div class="flex flex-col md:flex-row items-center bg-[#18191b] rounded-2xl p-10 w-full gap-10">
+           <div class="flex-1">
+            <h2 class="text-sky-400 text-2xl font-bold mb-4">
+             CONTRATE-ME
+            </h2>
+            <p class="text-white font-bold mb-6">
+             SOU UM DESENVOLVEDOR APAIXONADO POR TECNOLOGIA, INOVAÇÃO E SOLUÇÕES INTELIGENTES. VAMOS CONSTRUIR JUNTOS PROJETOS MODERNOS, ESCALÁVEIS E DE ALTA PERFORMANCE PARA TRANSFORMAR SUAS IDEIAS EM REALIDADE.
+            </p>
+            <form class="space-y-4">
+             <div>
+              <label class="block text-gray-400 font-bold mb-1" for="name-hire">
+               NOME COMPLETO
+              </label>
+              <input class="w-full rounded-full bg-white text-gray-900 px-4 py-2 font-bold" id="name-hire" placeholder="" type="text"/>
+             </div>
+             <div>
+              <label class="block text-gray-400 font-bold mb-1" for="email-hire">
+               E-MAIL
+              </label>
+              <input class="w-full rounded-full bg-white text-gray-900 px-4 py-2 font-bold" id="email-hire" placeholder="" type="email"/>
+             </div>
+             <div>
+              <label class="block text-gray-400 font-bold mb-1" for="project-hire">
+               MENSAGEM:
+              </label>
+              <textarea class="w-full rounded-2xl bg-white text-gray-900 px-4 py-2 font-bold" id="project-hire" rows="4"></textarea>
+             </div>
+             <button id="hireMeBtnFront" class="bg-blue-700 text-white px-4 py-2 rounded-md flex items-center justify-center relative w-32 h-12 mt-2" type="submit">
+              Hire me!
+             </button>
+            </form>
+           </div>
+           <div class="flex-1 flex justify-center">
+            <img alt="Foto desenvolvedor" class="rounded-full w-72 h-72 object-cover" src="/frontend/static/images/foto_ian_santos1.png" loading="lazy"/>
+           </div>
+          </div>
+        </section>
+        <!-- SEÇÃO DESAFIOS -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6 flex flex-col" id="programming-challenges">
+          <h2 class="text-sky-400 text-2xl font-bold mb-8">
+            DESAFIOS DE PROGRAMAÇÃO
+          </h2>
+          <div class="bg-[#18191b] rounded-2xl p-8 w-full max-w-4xl mx-auto mb-8">
+            <h3 class="text-white font-bold text-lg mb-2">Desafio 1: Soma de Números</h3>
+            <p class="text-gray-300 mb-4">
+              Escreva uma função <code class="bg-gray-800 px-2 py-1 rounded text-sky-400">soma(a, b)</code> que retorna a soma de dois números.
+            </p>
+            <textarea id="challenge-code" class="w-full bg-gray-900 text-white rounded p-3 mb-2 font-mono" rows="5" placeholder="function soma(a, b) {\n  // seu código aqui\n}"></textarea>
+            <button id="run-challenge" class="bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-full px-6 py-2 mb-2">Executar</button>
+            <div id="challenge-result" class="text-white font-bold mt-2"></div>
+          </div>
+        </section>
+        <!-- SEÇÃO CONQUISTAS -->
+        <section class="mt-20 max-w-7xl mx-auto w-full px-6 flex flex-col" id="achievements" aria-label="Conquistas do usuário">
+          <h2 class="text-sky-400 text-2xl font-bold mb-8">
+            CONQUISTAS
+          </h2>
+          <div id="achievements-list" class="flex flex-wrap gap-4 justify-center"></div>
+        </section>
+      </div>
+    </div>
+    <!-- FIM DO CONTAINER CENTRALIZADOR -->
+  </main>
+  <!-- Modal for project images -->
+  <div aria-hidden="true" aria-labelledby="modalTitle" aria-modal="true" class="modal" id="myModal" role="dialog" style="display:none; justify-content:center; align-items:center;" tabindex="-1">
+   <span aria-label="Fechar modal de imagem do projeto" class="close" onclick="closeModal()" role="button" tabindex="0">
+    ×
+   </span>
+   <div class="modal-content" role="document">
+    <img alt="Imagem expandida do projeto selecionado" class="max-w-full max-h-[80vh] rounded-lg object-contain" id="img01" src="" role="img" loading="lazy"/>
+   </div>
+  </div>
+  <!-- Skills modal -->
+  <div aria-hidden="true" aria-labelledby="skillsModalTitle" aria-modal="true" class="modal" id="skillsModal" role="dialog" tabindex="-1">
+   <div class="modal-content" role="document">
+    <h2 id="skillsModalTitle">
+     Parabéns! Você descobriu minhas habilidades!
+    </h2>
+    <p class="mb-4">
+     Continue explorando para conhecer mais sobre meu trabalho.
+    </p>
+    <button class="bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-full px-6 py-2" onclick="closeSkillsModal()" aria-label="Fechar modal de habilidades" role="button">
+     Fechar
+    </button>
+   </div>
+  </div>
+  <!-- Modal do Easter Egg -->
+  <div id="easterEggModal" role="dialog" aria-modal="true" aria-labelledby="eggTitle" tabindex="-1">
+    <div class="modal-content" role="document">
+      <button class="close-egg" aria-label="Fechar modal do easter egg" onclick="closeEasterEggModal()" role="button">&times;</button>
+      <span class="party-emoji" aria-label="Emoji de festa">🎉🥚</span>
+      <div class="egg-title" id="eggTitle">Você encontrou um segredo!</div>
+      <div class="egg-msg">
+        Parabéns, você ativou o <b>modo festa</b>!<br>
+        Agora, vá e conquiste o mundo da programação!<br>
+        <span style="font-size:1.5rem;" aria-label="Emojis de foguete e computador">🚀💻</span>
+      </div>
+      <button class="egg-btn" onclick="closeEasterEggModal()" aria-label="Voltar ao normal" role="button">Voltar ao normal</button>
+    </div>
+  </div>
+  <script>
+  </script>
+  <!-- Referência ao script.js -->
+  <script src="/frontend/static/js/script.js"></script>
+ </body>
+</html>
